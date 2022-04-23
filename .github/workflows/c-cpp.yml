@@ -24,20 +24,11 @@ jobs:
     - name: Compile x86 Program
       working-directory: ./
       run: msbuild /p:configuration=release /p:platform=x86 SchtaskCreator.vcxproj
-      
-    - name: Compile x64 Program
-      working-directory: ./
-      run: msbuild /p:configuration=release /p:platform=x64 SchtaskCreator.vcxproj
-      
+
     - name: pack x86 zip
       working-directory: ./
       shell: powershell
       run: Compress-Archive -Path "Release\SchtaskCreator.exe" -DestinationPath "C:\SchtaskCreatorX86.zip"
-      
-    - name: pack x64 zip
-      working-directory: ./
-      shell: powershell
-      run: Compress-Archive -Path "x64\Release\SchtaskCreator.exe" -DestinationPath  "C:\SchtaskCreatorX64.zip"
       
     - name: Create Release
       id: create_release
@@ -51,16 +42,6 @@ jobs:
           Automated Release by GitHub Action CI
         draft: false
         prerelease: false
-    - name: Upload Release Asset (x64)
-      id: upload-release-asset-x64
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: C:\SchtaskCreatorX64.zip
-        asset_name: SchtaskCreatorX64.zip
-        asset_content_type: application/zip
     - name: Upload Release Asset (x86)
       id: upload-release-asset-x86
       uses: actions/upload-release-asset@v1
